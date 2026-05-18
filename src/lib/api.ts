@@ -18,6 +18,7 @@ export interface Opportunity {
   mc_rank: number;
   rho_annual: number;
   premium: number;
+  spot_price:number;
   perp_price: number;
   signal: SignalKey;
 }
@@ -61,10 +62,12 @@ function mockOpportunities(): Opportunity[] {
     const tierMult = tier === "SMALL" ? 3 : tier === "MID" ? 1.6 : 0.7;
     const rho = (r() - 0.5) * 4 * tierMult;
     const sig: SignalKey = rho > 0.5 ? "SHORT_PERP_LONG_SPOT" : rho < -0.3 ? "LONG_PERP_SHORT_SPOT" : "NEUTRAL";
+    const perpPrice = ({ BTC: 67234.21, ETH: 3421.55, SOL: 168.42 } as Record<string, number>)[symbol] ?? r() * 50;
     return {
       symbol, name, tier: tier as Tier, mc_rank: rank,
       rho_annual: rho, premium: rho * 0.15,
-      perp_price: ({ BTC: 67234.21, ETH: 3421.55, SOL: 168.42 } as Record<string, number>)[symbol] ?? r() * 50,
+      perp_price: perpPrice,
+      spot_price: perpPrice * (1 - rho * 0.02),
       signal: sig,
     };
   });

@@ -149,16 +149,17 @@ function Dashboard() {
                   <Th label="MC Rank" onClick={() => toggleSort("mc_rank")} active={sortKey === "mc_rank"} dir={sortDir} right />
                   <Th label="ρ (Annual)" onClick={() => toggleSort("rho_annual")} active={sortKey === "rho_annual"} dir={sortDir} right />
                   <Th label="Premium" onClick={() => toggleSort("premium")} active={sortKey === "premium"} dir={sortDir} right />
+                  <Th label="Spot Price" onClick={() => toggleSort("spot_price")} active={sortKey === "spot_price"} dir={sortDir} right className="hidden sm:table-cell" />
                   <Th label="Perp Price" onClick={() => toggleSort("perp_price")} active={sortKey === "perp_price"} dir={sortDir} right />
                   <Th label="Signal" onClick={() => toggleSort("signal")} active={sortKey === "signal"} dir={sortDir} />
                 </tr>
               </thead>
               <tbody>
                 {ops.isLoading && Array.from({ length: 8 }).map((_, i) => (
-                  <tr key={i} className="border-b border-border/60"><td colSpan={7} className="p-3"><Skeleton className="h-8 w-full" /></td></tr>
+                  <tr key={i} className="border-b border-border/60"><td colSpan={8} className="p-3"><Skeleton className="h-8 w-full" /></td></tr>
                 ))}
                 {ops.isError && (
-                  <tr><td colSpan={7} className="py-16">
+                  <tr><td colSpan={8} className="py-16">
                     <div className="flex flex-col items-center gap-3 text-muted-foreground">
                       <AlertCircle className="h-8 w-8 text-destructive" />
                       <div className="text-sm">Failed to load opportunities.</div>
@@ -167,7 +168,7 @@ function Dashboard() {
                   </td></tr>
                 )}
                 {!ops.isLoading && !ops.isError && rows.length === 0 && (
-                  <tr><td colSpan={7} className="py-16">
+                  <tr><td colSpan={8} className="py-16">
                     <div className="flex flex-col items-center gap-2 text-muted-foreground">
                       <Inbox className="h-8 w-8" /><div className="text-sm">No opportunities match your filters.</div>
                     </div>
@@ -193,6 +194,7 @@ function Dashboard() {
                       </td>
                       <td className="px-4 text-right font-mono text-xs text-muted-foreground" data-num>{fmtPct(o.premium, 2)}</td>
                       <td className="px-4 text-right font-mono" data-num>${fmtPrice(o.perp_price)}</td>
+                      <td className="hidden px-4 text-right font-mono sm:table-cell" data-num>${fmtPrice(o.spot_price)}</td>
                       <td className="px-4 py-3"><SignalBadge signal={o.signal} size="sm" /></td>
                     </tr>
                   );
@@ -207,10 +209,10 @@ function Dashboard() {
   );
 }
 
-function Th({ label, onClick, active, dir, right }: { label: string; onClick: () => void; active: boolean; dir: "asc" | "desc"; right?: boolean }) {
+function Th({ label, onClick, active, dir, right, className }: { label: string; onClick: () => void; active: boolean; dir: "asc" | "desc"; right?: boolean; className?: string }) {
   const Icon = !active ? ArrowUpDown : dir === "asc" ? ArrowUp : ArrowDown;
   return (
-    <th className={`px-4 py-3 font-medium ${right ? "text-right" : "text-left"}`}>
+    <th className={`px-4 py-3 font-medium ${right ? "text-right" : "text-left"} ${className ?? ""}`}>
       <button onClick={onClick} className={`inline-flex items-center gap-1 transition-colors hover:text-foreground ${active ? "text-foreground" : ""}`}>
         {label} <Icon className="h-3 w-3 opacity-60" />
       </button>
