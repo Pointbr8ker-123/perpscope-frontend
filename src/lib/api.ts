@@ -142,7 +142,7 @@ export function rhoColor(rho: number): string {
   if (a > 0.2) return "#EAB308";
   return "#94A3B8";
 }
-export const fmtPct = (n: number, d = 2) => `${(n * 100).toFixed(d)}%`;
+export const fmtPct = (n: number, d = 2) => `${n.toFixed(d)}%`;
 export const fmtPrice = (n: number) =>
   n >= 100 ? n.toLocaleString(undefined, { maximumFractionDigits: 2 }) :
   n >= 1 ? n.toFixed(3) : n.toFixed(5);
