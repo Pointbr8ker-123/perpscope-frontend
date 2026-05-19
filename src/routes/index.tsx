@@ -149,6 +149,7 @@ function Dashboard() {
                   <Th label="MC Rank" onClick={() => toggleSort("mc_rank")} active={sortKey === "mc_rank"} dir={sortDir} right />
                   <Th label="ρ (Annual)" onClick={() => toggleSort("rho_annual")} active={sortKey === "rho_annual"} dir={sortDir} right />
                   <Th label="Premium" onClick={() => toggleSort("premium")} active={sortKey === "premium"} dir={sortDir} right />
+                  <Th label="Funding Rate" onClick={() => toggleSort("funding_rate")} active={sortKey === "funding_rate"} dir={sortDir} right />
                   <Th label="Perp Price" onClick={() => toggleSort("perp_price")} active={sortKey === "perp_price"} dir={sortDir} right />
                   <Th label="Spot Price" onClick={() => toggleSort("spot_price")} active={sortKey === "spot_price"} dir={sortDir} right className="hidden sm:table-cell" />
                   <Th label="Signal" onClick={() => toggleSort("signal")} active={sortKey === "signal"} dir={sortDir} />
@@ -156,10 +157,10 @@ function Dashboard() {
               </thead>
               <tbody>
                 {ops.isLoading && Array.from({ length: 8 }).map((_, i) => (
-                  <tr key={i} className="border-b border-border/60"><td colSpan={8} className="p-3"><Skeleton className="h-8 w-full" /></td></tr>
+                  <tr key={i} className="border-b border-border/60"><td colSpan={9} className="p-3"><Skeleton className="h-8 w-full" /></td></tr>
                 ))}
                 {ops.isError && (
-                  <tr><td colSpan={8} className="py-16">
+                  <tr><td colSpan={9} className="py-16">
                     <div className="flex flex-col items-center gap-3 text-muted-foreground">
                       <AlertCircle className="h-8 w-8 text-destructive" />
                       <div className="text-sm">Failed to load opportunities.</div>
@@ -168,7 +169,7 @@ function Dashboard() {
                   </td></tr>
                 )}
                 {!ops.isLoading && !ops.isError && rows.length === 0 && (
-                  <tr><td colSpan={8} className="py-16">
+                  <tr><td colSpan={9} className="py-16">
                     <div className="flex flex-col items-center gap-2 text-muted-foreground">
                       <Inbox className="h-8 w-8" /><div className="text-sm">No opportunities match your filters.</div>
                     </div>
@@ -193,6 +194,7 @@ function Dashboard() {
                         {o.rho_annual >= 0 ? "+" : ""}{fmtPct(o.rho_annual, 1)}
                       </td>
                       <td className="px-4 text-right font-mono text-xs text-muted-foreground" data-num>{fmtPct(o.premium, 2)}</td>
+                      <td className="px-4 text-right font-mono" data-num>{fmtPct(o.funding_rate, 4)}</td>
                       <td className="px-4 text-right font-mono" data-num>${fmtPrice(o.perp_price)}</td>
                       <td className="hidden px-4 text-right font-mono sm:table-cell" data-num>${fmtPrice(o.spot_price)}</td>
                       <td className="px-4 py-3"><SignalBadge signal={o.signal} size="sm" /></td>

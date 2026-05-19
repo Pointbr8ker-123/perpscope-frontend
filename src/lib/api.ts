@@ -18,6 +18,7 @@ export interface Opportunity {
   mc_rank: number;
   rho_annual: number;
   premium: number;
+  funding_rate: number;
   perp_price: number;
   spot_price:number;
   signal: SignalKey;
@@ -66,6 +67,7 @@ function mockOpportunities(): Opportunity[] {
     return {
       symbol, name, tier: tier as Tier, mc_rank: rank,
       rho_annual: rho, premium: rho * 0.15,
+      funding_rate: rho / 1095,
       perp_price: perpPrice,
       spot_price: perpPrice * (1 - rho * 0.02),
       signal: sig,
