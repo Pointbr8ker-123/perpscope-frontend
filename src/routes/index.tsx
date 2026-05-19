@@ -149,8 +149,8 @@ function Dashboard() {
                   <Th label="MC Rank" onClick={() => toggleSort("mc_rank")} active={sortKey === "mc_rank"} dir={sortDir} right />
                   <Th label="ρ (Annual)" onClick={() => toggleSort("rho_annual")} active={sortKey === "rho_annual"} dir={sortDir} right />
                   <Th label="Premium" onClick={() => toggleSort("premium")} active={sortKey === "premium"} dir={sortDir} right />
-                  <Th label="Spot Price" onClick={() => toggleSort("spot_price")} active={sortKey === "spot_price"} dir={sortDir} right className="hidden sm:table-cell" />
                   <Th label="Perp Price" onClick={() => toggleSort("perp_price")} active={sortKey === "perp_price"} dir={sortDir} right />
+                  <Th label="Spot Price" onClick={() => toggleSort("spot_price")} active={sortKey === "spot_price"} dir={sortDir} right className="hidden sm:table-cell" />
                   <Th label="Signal" onClick={() => toggleSort("signal")} active={sortKey === "signal"} dir={sortDir} />
                 </tr>
               </thead>
