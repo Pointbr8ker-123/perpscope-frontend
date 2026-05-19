@@ -18,8 +18,8 @@ export interface Opportunity {
   mc_rank: number;
   rho_annual: number;
   premium: number;
-  spot_price:number;
   perp_price: number;
+  spot_price:number;
   signal: SignalKey;
 }
 export interface Stats {
