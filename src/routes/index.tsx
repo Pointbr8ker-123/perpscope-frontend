@@ -194,7 +194,7 @@ function Dashboard() {
                         {o.rho_annual >= 0 ? "+" : ""}{fmtPct(o.rho_annual, 1)}
                       </td>
                       <td className="px-4 text-right font-mono text-xs text-muted-foreground" data-num>{fmtPct(o.premium, 2)}</td>
-                      <td className="px-4 text-right font-mono" data-num>{fmtPct(o.funding_rate, 4)}</td>
+                      <td className="px-4 text-right font-mono" data-num>{fmtPct(o.funding_rate * 100, 4)}</td>
                       <td className="px-4 text-right font-mono" data-num>${fmtPrice(o.perp_price)}</td>
                       <td className="hidden px-4 text-right font-mono sm:table-cell" data-num>${fmtPrice(o.spot_price)}</td>
                       <td className="px-4 py-3"><SignalBadge signal={o.signal} size="sm" /></td>
