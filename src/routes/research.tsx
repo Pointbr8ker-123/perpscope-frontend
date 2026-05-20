@@ -130,14 +130,19 @@ function ResearchPage() {
               </div>
               <div>
                 <div className="text-xs uppercase tracking-wider text-foreground">Formula</div>
-                <pre className="mt-2 overflow-x-auto rounded-md border border-border bg-bg-secondary p-3 font-mono text-xs text-foreground">{`ρ_annual = funding_rate × periods_per_year
-periods_per_year = 365 × (24 / funding_interval_hours)
+                <pre className="mt-2 overflow-x-auto rounded-md border border-border bg-bg-secondary p-3 font-mono text-xs text-foreground">{`ρ = κ × (F − S)/F + sign(ι − r) × γ − r
+ρ_annual = ρ × 1095
 opportunity := |ρ_annual| > threshold(fees, slippage)`}</pre>
               </div>
               <div>
                 <div className="text-xs uppercase tracking-wider text-foreground">Parameters</div>
                 <ul className="mt-1 list-inside list-disc space-y-1">
-                  <li>funding_rate: 8-hour funding paid by perp longs to shorts (or vice versa)</li>
+                  <li>κ = 1: convenience yield scaling factor</li>
+                  <li>F: perpetual futures price, S: spot price</li>
+                  <li>ι = 0.01% per 8h: index funding rate</li>
+                  <li>γ = 0.05%: funding rate adjustment</li>
+                  <li>r ≈ 6% annual: stablecoin proxy rate</li>
+                  <li>1095 = 365 × 3: annualization factor (3 periods per day, 8h funding)</li>
                   <li>threshold: cost-adjusted cutoff per fee tier (retail / fund / institution / MM)</li>
                   <li>tier: LARGE (rank ≤ 10), MID (11–60), SMALL (61+)</li>
                 </ul>
