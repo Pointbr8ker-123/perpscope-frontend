@@ -1,6 +1,10 @@
-import { Link, useLocation } from "@tanstack/react-router";
-import { Activity, Moon, Sun, Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { Activity, Moon, Sun, Menu, X, LogOut, Settings } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { signOut } from "@/lib/auth";
+
 
 function ThemeToggle() {
   const [dark, setDark] = useState(true);
@@ -37,6 +41,52 @@ function NavLink({ to, label }: { to: string; label: string }) {
   );
 }
 
+function UserMenu() {
+  const { user, loading } = useAuth();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    window.addEventListener("mousedown", onClick);
+    return () => window.removeEventListener("mousedown", onClick);
+  }, []);
+  if (loading) return <div className="h-9 w-9" />;
+  if (!user) {
+    return (
+      <Link to="/login" className="inline-flex h-9 items-center rounded-md border border-border bg-card/60 px-3 text-sm font-medium text-foreground transition hover:border-border-strong hover:bg-elevated">
+        Sign In
+      </Link>
+    );
+  }
+  const initials = (user.email ?? "?").slice(0, 2).toUpperCase();
+  async function onSignOut() {
+    await signOut();
+    toast.success("Signed out");
+    navigate({ to: "/login" });
+  }
+  return (
+    <div ref={ref} className="relative">
+      <button onClick={() => setOpen((o) => !o)} className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-primary to-purple text-xs font-bold text-white">
+        {initials}
+      </button>
+      {open && (
+        <div className="absolute right-0 mt-2 w-60 overflow-hidden rounded-md border border-border bg-card shadow-xl">
+          <div className="border-b border-border px-3 py-2.5 text-xs text-muted-foreground truncate">{user.email}</div>
+          <Link to="/account" onClick={() => setOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm hover:bg-elevated">
+            <Settings className="h-4 w-4 text-muted-foreground" /> Account Settings
+          </Link>
+          <button onClick={onSignOut} className="flex w-full items-center gap-2 border-t border-border px-3 py-2.5 text-sm text-destructive hover:bg-destructive/10">
+            <LogOut className="h-4 w-4" /> Sign Out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
   return (
@@ -64,6 +114,7 @@ export function Navbar() {
             <span className="text-xs font-medium text-muted-foreground">Live</span>
           </div>
           <ThemeToggle />
+          <UserMenu />
           <button onClick={() => setOpen(true)} className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border md:hidden">
             <Menu className="h-4 w-4" />
           </button>

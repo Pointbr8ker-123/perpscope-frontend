@@ -1,4 +1,5 @@
 import axios from "axios";
+import { supabase } from "@/integrations/supabase/client";
 
 const BASE = (import.meta.env.VITE_API_URL as string | undefined) || "";
 
@@ -40,6 +41,19 @@ export interface ResearchSummary {
   ratio_small_large: number;
   tiers: { tier: Tier; count: number; mean_abs_rho: number; max_abs_rho: number }[];
   scatter: { symbol: string; name: string; tier: Tier; rank: number; mean_abs_rho: number }[];
+}
+export interface UserAlert {
+  id: string;
+  symbol: string | null;
+  tier: "ALL" | Tier;
+  threshold: "RETAIL" | "FUND" | "INSTITUTION" | "MARKET_MAKER";
+  min_rho: number;
+}
+export interface TelegramStatus { connected: boolean; chat_id: string | null; }
+export async function getAuthHeaders(): Promise<Record<string, string>> {
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 // --- mock data fallback ---
@@ -134,6 +148,48 @@ export const api = {
   history: (symbol: string, days = 90) => call<HistoryPoint[]>(`/api/history/${symbol}?days=${days}`, () => mockHistory(symbol, days)),
   funding: (symbol: string, days = 90) => call<FundingPoint[]>(`/api/funding/${symbol}?days=${days}`, () => mockFunding(symbol, days)),
   research: (days = 90) => call<ResearchSummary>(`/api/research/summary?days=${days}`, mockResearch),
+  user: {
+    async telegram(chat_id: string) {
+      const headers = await getAuthHeaders();
+      if (!BASE) return { ok: true, chat_id };
+      const r = await axios.post(`${BASE}/api/user/telegram`, { chat_id }, { headers });
+      return r.data;
+    },
+    async telegramStatus(): Promise<TelegramStatus> {
+      const headers = await getAuthHeaders();
+      if (!BASE) return { connected: false, chat_id: null };
+      try {
+        const r = await axios.get(`${BASE}/api/user/telegram`, { headers });
+        return r.data;
+      } catch { return { connected: false, chat_id: null }; }
+    },
+    async disconnectTelegram() {
+      const headers = await getAuthHeaders();
+      if (!BASE) return { ok: true };
+      const r = await axios.delete(`${BASE}/api/user/telegram`, { headers });
+      return r.data;
+    },
+    async alerts(): Promise<UserAlert[]> {
+      const headers = await getAuthHeaders();
+      if (!BASE) return [];
+      try {
+        const r = await axios.get(`${BASE}/api/user/alerts`, { headers });
+        return r.data;
+      } catch { return []; }
+    },
+    async createAlert(a: Omit<UserAlert, "id">): Promise<UserAlert> {
+      const headers = await getAuthHeaders();
+      if (!BASE) return { ...a, id: crypto.randomUUID() };
+      const r = await axios.post(`${BASE}/api/user/alerts`, a, { headers });
+      return r.data;
+    },
+    async deleteAlert(id: string) {
+      const headers = await getAuthHeaders();
+      if (!BASE) return { ok: true };
+      const r = await axios.delete(`${BASE}/api/user/alerts/${id}`, { headers });
+      return r.data;
+    },
+  },
 };
 
 export function rhoColor(rho: number): string {
