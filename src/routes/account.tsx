@@ -106,7 +106,7 @@ function TelegramSection() {
         </div>
       ) : (
         <ol className="space-y-3 text-sm text-muted-foreground">
-          <li><span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary">1</span>Message <span className="font-mono text-foreground">@PerpScopeBot</span> on Telegram and type <span className="font-mono text-foreground">/start</span></li>
+          <li><span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary">1</span>Message <span className="font-mono text-foreground">@PerpScope_Bot</span> on Telegram and type <span className="font-mono text-foreground">/start</span></li>
           <li><span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary">2</span>Copy your Chat ID from the bot's reply</li>
           <li>
             <div className="mb-2"><span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary">3</span>Paste your Chat ID below</div>
