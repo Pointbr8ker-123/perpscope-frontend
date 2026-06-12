@@ -104,6 +104,7 @@ export function Navbar() {
         <nav className="hidden items-center gap-1 md:flex">
           <NavLink to="/" label="Dashboard" />
           <NavLink to="/research" label="Research" />
+          <NavLink to="/about" label="About" />
         </nav>
         <div className="flex items-center gap-2">
           <div className="hidden items-center gap-2 rounded-md border border-border bg-card/40 px-2.5 py-1 sm:flex">
@@ -131,6 +132,7 @@ export function Navbar() {
           <div className="flex flex-col gap-2 px-4 pt-6">
             <Link to="/" onClick={() => setOpen(false)} className="rounded-md px-4 py-3 text-base font-medium hover:bg-elevated">Dashboard</Link>
             <Link to="/research" onClick={() => setOpen(false)} className="rounded-md px-4 py-3 text-base font-medium hover:bg-elevated">Research</Link>
+            <Link to="/about" onClick={() => setOpen(false)} className="rounded-md px-4 py-3 text-base font-medium hover:bg-elevated">About</Link>
           </div>
         </div>
       )}

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, useEffect } from "react";
-import { Layers, Zap, BarChart3, TrendingUp, Search, ArrowUpDown, ArrowUp, ArrowDown, Inbox, AlertCircle } from "lucide-react";
+import { Layers, Zap, BarChart3, TrendingUp, Search, ArrowUpDown, ArrowUp, ArrowDown, Inbox, AlertCircle, HelpCircle } from "lucide-react";
 import { api, fmtPct, fmtPrice, rhoColor, type Opportunity, type Tier } from "@/lib/api";
 import { Navbar } from "@/components/perpscope/navbar";
 import { SignalBadge, TierBadge, Skeleton } from "@/components/perpscope/badges";
@@ -152,7 +152,7 @@ function Dashboard() {
                   <Th label="Funding Rate" onClick={() => toggleSort("funding_rate")} active={sortKey === "funding_rate"} dir={sortDir} right />
                   <Th label="Perp Price" onClick={() => toggleSort("perp_price")} active={sortKey === "perp_price"} dir={sortDir} right />
                   <Th label="Spot Price" onClick={() => toggleSort("spot_price")} active={sortKey === "spot_price"} dir={sortDir} right className="hidden sm:table-cell" />
-                  <Th label="Signal" onClick={() => toggleSort("signal")} active={sortKey === "signal"} dir={sortDir} />
+                  <Th label="Signal" onClick={() => toggleSort("signal")} active={sortKey === "signal"} dir={sortDir} helpLink="/about#signals" />
                 </tr>
               </thead>
               <tbody>
@@ -211,13 +211,18 @@ function Dashboard() {
   );
 }
 
-function Th({ label, onClick, active, dir, right, className }: { label: string; onClick: () => void; active: boolean; dir: "asc" | "desc"; right?: boolean; className?: string }) {
+function Th({ label, onClick, active, dir, right, className, helpLink }: { label: string; onClick: () => void; active: boolean; dir: "asc" | "desc"; right?: boolean; className?: string; helpLink?: string }) {
   const Icon = !active ? ArrowUpDown : dir === "asc" ? ArrowUp : ArrowDown;
   return (
     <th className={`px-4 py-3 font-medium ${right ? "text-right" : "text-left"} ${className ?? ""}`}>
       <button onClick={onClick} className={`inline-flex items-center gap-1 transition-colors hover:text-foreground ${active ? "text-foreground" : ""}`}>
         {label} <Icon className="h-3 w-3 opacity-60" />
       </button>
+      {helpLink && (
+        <Link to={helpLink} className="ml-1 inline-block align-middle text-muted-foreground hover:text-primary" title="What do these signals mean?">
+          <HelpCircle className="h-3 w-3" />
+        </Link>
+      )}
     </th>
   );
 }
