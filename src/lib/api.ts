@@ -145,8 +145,8 @@ export const api = {
       const o = mockOpportunities().find(x => x.symbol === symbol)!;
       return { ...o, mean_abs_rho_90d: Math.abs(o.rho_annual) * 0.8, pct_time_opportunity: 0.42 };
     }),
-  history: (symbol: string, days = 90) => call<HistoryPoint[]>(`/api/history/${symbol}?days=${days}`, () => mockHistory(symbol, days)),
-  funding: (symbol: string, days = 90) => call<FundingPoint[]>(`/api/funding/${symbol}?days=${days}`, () => mockFunding(symbol, days)),
+  history: (symbol: string, days = 90) => call<HistoryPoint[]>(`/api/history/${symbol}?days=${days}`, () => mockHistory(symbol, days), true),
+  funding: (symbol: string, days = 90) => call<FundingPoint[]>(`/api/funding/${symbol}?days=${days}`, () => mockFunding(symbol, days), true),
   research: (days = 90) => call<ResearchSummary>(`/api/research/summary?days=${days}`, mockResearch),
   user: {
     async telegram(chat_id: string) {
